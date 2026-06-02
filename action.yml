@@ -1,12 +1,12 @@
 name: Setup Riptides
-description: Install the Riptides daemon and join a control plane using GitHub Actions OIDC — no join tokens required.
+description: Install the Riptides daemon and join a control plane using GitHub Actions OIDC. No join tokens required.
 
 inputs:
   controlplane-url:
     description: Control plane URL (e.g. https://abc123.console.riptides.io)
     required: true
   audience:
-    description: OIDC token audience — must match the GitHubActionsVerifier configured on the control plane
+    description: OIDC token audience, must match the GitHubActionsVerifier configured on the control plane
     required: false
     default: riptides
   version:
