@@ -32,9 +32,26 @@ jobs:
       - uses: riptideslabs/setup-riptides@v1
         with:
           controlplane-url: https://abc123.console.riptides.io
+```
 
-      # From here, outbound connections are transparently mTLS via Riptides
-      - run: curl https://my-internal-service.example.com
+### Fetch a cloud resource
+
+No AWS access keys in GitHub secrets — Riptides injects temporary credentials based on the runner's workload identity.
+
+```yaml
+      - name: Fetch config from S3
+        run: aws s3 cp s3://my-bucket/config.json ./config.json
+```
+
+### Post a deployment result
+
+Riptides injects the bearer token for outbound calls to services in your policy — no secrets stored in the workflow.
+
+```yaml
+      - name: Notify Sentry of deployment
+        run: |
+          sentry-cli releases new "${{ github.sha }}"
+          sentry-cli releases deploys "${{ github.sha }}" new -e production
 ```
 
 ## Inputs
