@@ -1,6 +1,6 @@
 # setup-riptides
 
-GitHub Action to install the [Riptides](https://riptides.io) daemon and join a control plane from a GitHub Actions runner. Authentication uses GitHub Actions OIDC — no join tokens or long-lived credentials required.
+GitHub Action to install the [Riptides](https://riptides.io) daemon and join a control plane from a GitHub Actions runner. Authentication uses GitHub Actions OIDC, no join tokens or long-lived credentials required.
 
 ## Prerequisites
 
@@ -13,8 +13,8 @@ metadata:
   name: github-actions
 spec:
   GitHubActions:
-    repositoryOwner: your-org   # required — restricts to your org
-    audience: riptides            # must match the action's audience input
+    repositoryOwner: your-org   # required, restricts to your org
+    audience: riptides           # must match the action's audience input
 ```
 
 2. The workflow must have `id-token: write` permission.
@@ -36,7 +36,7 @@ jobs:
 
 ### Fetch a cloud resource
 
-No AWS access keys in GitHub secrets — Riptides injects temporary credentials based on the runner's workload identity.
+No AWS access keys in GitHub secrets. Riptides injects temporary credentials based on the runner's workload identity.
 
 ```yaml
       - name: Fetch config from S3
@@ -45,7 +45,7 @@ No AWS access keys in GitHub secrets — Riptides injects temporary credentials 
 
 ### Post a deployment result
 
-Riptides injects the bearer token for outbound calls to services in your policy — no secrets stored in the workflow.
+Riptides injects the bearer token for outbound calls to services in your policy, no secrets stored in the workflow.
 
 ```yaml
       - name: Notify Sentry of deployment
@@ -58,8 +58,8 @@ Riptides injects the bearer token for outbound calls to services in your policy 
 
 | Input | Required | Default | Description |
 |---|---|---|---|
-| `controlplane-url` | yes | — | URL of your Riptides control plane |
-| `audience` | no | `riptides` | OIDC token audience — must match `GitHubActionsVerifier` config |
+| `controlplane-url` | yes | | URL of your Riptides control plane |
+| `audience` | no | `riptides` | OIDC token audience, must match `GitHubActionsVerifier` config |
 | `version` | no | `latest` | Daemon version to install |
 
 ## How it works
@@ -67,7 +67,7 @@ Riptides injects the bearer token for outbound calls to services in your policy 
 The action calls the Riptides [install.sh](https://docs.riptides.io/install.sh) with `--github-actions`. The installer:
 
 1. Installs the kernel driver and daemon package
-2. Calls `riptides daemon auth --plugin GitHubActions` — fetches an OIDC token from the Actions token endpoint and exchanges it for a SPIFFE x509 identity certificate
+2. Calls `riptides daemon auth --plugin GitHubActions`, fetches an OIDC token from the Actions token endpoint and exchanges it for a SPIFFE x509 identity certificate
 3. Starts the daemon as a systemd service
 
 The runner VM is ephemeral so no cleanup step is needed.
