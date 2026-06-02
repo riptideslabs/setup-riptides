@@ -13,7 +13,7 @@ metadata:
   name: github-actions
 spec:
   GitHubActions:
-    repository_owner: your-org   # required — restricts to your org
+    repositoryOwner: your-org   # required — restricts to your org
     audience: riptides            # must match the action's audience input
 ```
 
