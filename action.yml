@@ -1,0 +1,28 @@
+name: Setup Riptides
+description: Install the Riptides daemon and join a control plane using GitHub Actions OIDC — no join tokens required.
+
+inputs:
+  controlplane-url:
+    description: Control plane URL (e.g. https://abc123.console.riptides.io)
+    required: true
+  audience:
+    description: OIDC token audience — must match the GitHubActionsVerifier configured on the control plane
+    required: false
+    default: riptides
+  version:
+    description: "Daemon version to install (default: latest)"
+    required: false
+    default: latest
+
+runs:
+  using: composite
+  steps:
+    - name: Install Riptides daemon
+      shell: bash
+      env:
+        AUDIENCE: ${{ inputs.audience }}
+        DAEMON_VERSION: ${{ inputs.version }}
+      run: |
+        curl -fsSL https://docs.riptides.io/install.sh | sudo -E bash -s -- \
+          --control-plane "${{ inputs.controlplane-url }}" \
+          --github-actions
