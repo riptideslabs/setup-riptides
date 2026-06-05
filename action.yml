@@ -27,5 +27,6 @@ runs:
         DAEMON_VERSION: ${{ inputs.version }}
       run: |
         curl -fsSL https://docs.riptides.io/install.sh | sudo -E bash -s -- \
-          --control-plane "${{ inputs.controlplane-url }}" \
-          --github-actions "${{ inputs.audience }}"
+          --controlplane-url "${{ inputs.controlplane-url }}" \
+          --plugin GitHubActions \
+          --github-actions-audience "${{ inputs.audience }}"
