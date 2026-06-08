@@ -1,0 +1,17 @@
+name: Test
+
+on:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./
+        with:
+          controlplane-url: ${{ secrets.CONTROLPLANE_URL }}
+          audience: riptides
