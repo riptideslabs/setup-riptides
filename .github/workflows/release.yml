@@ -1,0 +1,19 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  update-major-tag:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Move major version tag
+        run: |
+          major=$(echo "${GITHUB_REF_NAME}" | cut -d. -f1)
+          git tag -f "${major}"
+          git push origin "${major}" --force
