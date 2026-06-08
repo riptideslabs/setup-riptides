@@ -1,4 +1,4 @@
-name: Riptides
+name: Setup Riptides
 description: Install the Riptides daemon and join a control plane using GitHub Actions OIDC. No join tokens required.
 
 inputs:
