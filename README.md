@@ -2,6 +2,14 @@
 
 GitHub Action to install the [Riptides](https://riptides.io) daemon and join a control plane from a GitHub Actions runner. Authentication uses GitHub Actions OIDC, no join tokens or long-lived credentials required.
 
+## What is Riptides?
+
+Riptides is a zero-trust networking layer that runs as a kernel module on your hosts. For CI pipelines it solves two problems:
+
+**Secure secret injection** — instead of storing cloud credentials, API keys, or service tokens in GitHub secrets, Riptides gives the runner a verified SPIFFE workload identity and enforces your policy at the network layer. Your CI job calls AWS, S3, internal APIs, or any other service exactly as it would in production — credentials are injected transparently based on the runner's identity, without ever touching a secret.
+
+**Connection visibility** — every outbound and inbound TCP connection made during a CI job is tracked with full workload identity context: which workflow, which repository, which actor made the call, and whether it was allowed or denied by policy. This gives you the same traffic observability and access control in CI that you have across the rest of your fleet.
+
 ## Prerequisites
 
 1. A Riptides control plane with a `GitHubActionsVerifier` configured for your repository owner:
