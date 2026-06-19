@@ -25,6 +25,8 @@ spec:
     audience: riptides           # must match the action's audience input
 ```
 
+   If you don't have the verifier set up yet, follow the [Connect GitHub Actions Runners](https://docs.riptides.io/guides/connect-github-actions/) guide for the full walkthrough.
+
 2. The workflow must have `id-token: write` permission.
 
 ## Usage
