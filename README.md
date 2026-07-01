@@ -12,7 +12,7 @@ Riptides is a zero-trust networking layer that runs as a kernel module on your h
 
 ## Prerequisites
 
-1. A Riptides control plane with a `GitHubActionsVerifier` configured for your repository owner:
+1. A Riptides control plane with a `GitHubActionsVerifier` scoped to your organisation:
 
 ```yaml
 apiVersion: auth.riptides.io/v1alpha1
@@ -21,8 +21,9 @@ metadata:
   name: github-actions
 spec:
   GitHubActions:
-    repositoryOwner: your-org   # required, restricts to your org
-    audience: riptides           # must match the action's audience input
+    audience: riptides                          # must match the action's audience input
+  requiredMetadata:
+    - githubactions:repository:owner: your-org  # restricts to your org (add more groups for more orgs)
 ```
 
    If you don't have the verifier set up yet, follow the [Connect GitHub Actions Runners](https://docs.riptides.io/guides/connect-github-actions/) guide for the full walkthrough.
