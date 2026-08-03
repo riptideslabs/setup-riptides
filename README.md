@@ -72,6 +72,8 @@ Riptides injects the bearer token for outbound calls to services in your policy,
 | `controlplane-url` | yes | | URL of your Riptides control plane |
 | `audience` | no | `riptides` | OIDC token audience, must match `GitHubActionsVerifier` config |
 | `version` | no | `latest` | Daemon version to install |
+| `wait-for-ready` | no | `true` | Wait for the daemon to be fully ready before the step finishes |
+| `ready-timeout` | no | `120` | Seconds to wait for readiness |
 
 ## How it works
 
@@ -80,5 +82,8 @@ The action calls the Riptides [install.sh](https://docs.riptides.io/install.sh) 
 1. Installs the kernel driver and daemon package
 2. Calls `riptides daemon auth --plugin GitHubActions`, fetches an OIDC token from the Actions token endpoint and exchanges it for a SPIFFE x509 identity certificate
 3. Starts the daemon as a systemd service
+4. Waits until the driver reports the daemon fully ready — connected, trust anchors loaded, workload identity issued (`--wait-ready`)
+
+Step 4 matters because the daemon needs a moment after the service starts before traffic is actually intercepted. Without it, a step running immediately after this action can open connections that are missed. Set `wait-for-ready: false` to skip the wait.
 
 The runner VM is ephemeral so no cleanup step is needed.

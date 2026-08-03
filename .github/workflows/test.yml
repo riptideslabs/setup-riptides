@@ -24,3 +24,8 @@ jobs:
         run: lsmod | grep riptides
       - name: Verify daemon is running
         run: systemctl is-active riptides
+      - name: Verify daemon is ready
+        run: |
+          health=$(cat /sys/module/riptides/health)
+          echo "driver health: $health"
+          [[ "$health" == OK* ]]

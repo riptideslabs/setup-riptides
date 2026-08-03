@@ -13,6 +13,14 @@ inputs:
     description: "Daemon version to install (default: latest)"
     required: false
     default: latest
+  wait-for-ready:
+    description: Wait for the daemon to be fully ready (driver connected, workload identity issued) before finishing, so connections made by the next step are not missed
+    required: false
+    default: "true"
+  ready-timeout:
+    description: How long to wait, in seconds, for the daemon to become ready
+    required: false
+    default: "120"
 
 branding:
   icon: shield
@@ -26,7 +34,13 @@ runs:
       env:
         DAEMON_VERSION: ${{ inputs.version }}
       run: |
+        wait_args=()
+        if [[ "${{ inputs.wait-for-ready }}" == "true" ]]; then
+          wait_args=(--wait-ready --wait-timeout "${{ inputs.ready-timeout }}")
+        fi
+
         curl -fsSL https://docs.riptides.io/install.sh | sudo -E bash -s -- \
           --controlplane-url "${{ inputs.controlplane-url }}" \
           --plugin GitHubActions \
-          --github-actions-audience "${{ inputs.audience }}"
+          --github-actions-audience "${{ inputs.audience }}" \
+          "${wait_args[@]}"
